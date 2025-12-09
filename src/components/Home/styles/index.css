@@ -1,0 +1,16 @@
+@import "react-day-picker/style.css";
+
+.rdp-root {
+  --rdp-selected-border: 2px solid transparent;
+
+  .rdp-selected {
+    .rdp-day_button {
+      background-color: var(--color-purple-500);
+      color: var(--color-white);
+    }
+  }
+
+  .rdp-today:not(.rdp-outside) {
+    color: var(--color-black);
+  }
+}
