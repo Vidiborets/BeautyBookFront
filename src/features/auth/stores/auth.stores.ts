@@ -18,7 +18,6 @@ class AuthStore {
 
     setOnUnauthorized(() => {
       this.clearSession();
-      // ❗ не редиректим тут, только чистим состояние
     });
   }
 
