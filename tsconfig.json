@@ -43,8 +43,12 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts",
     "next.config.mjs",
-    "next.config.js",
-    "next.config.js"
+    "next.config.ts",
+    "next.config.ts",
+    "svgr.d.ts",
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
   ],
   "exclude": ["node_modules"]
 }
