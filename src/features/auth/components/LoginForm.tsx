@@ -19,8 +19,8 @@ export function LoginForm() {
   return (
     <Formik
       initialValues={{
-        email: "a.vidiborets@gmail.com",
-        password: "Cuba2307!",
+        email: "",
+        password: "",
       }}
       validationSchema={LoginSchema}
       onSubmit={async (values, { setSubmitting, setStatus }) => {

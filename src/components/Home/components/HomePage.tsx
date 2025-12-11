@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
-import type { AppointmentProps } from "@/src/types/index";
 import DatePicker from "./DatePicker";
 import { AppointmentList } from "@/src/features/appointments/components/AppointmentsList";
 import { isSameDay } from "@/src/features/appointments/utils/index";
@@ -12,15 +11,11 @@ import { Button } from "@/src/components/Button";
 
 const PAGE_SIZE = 5;
 
-function HomePageClientInner({ initialAppointments }: AppointmentProps) {
+function HomePageClientInner() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date(),
   );
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-
-  useEffect(() => {
-    appointmentsStore.hydrate(initialAppointments);
-  }, [initialAppointments]);
 
   useEffect(() => {
     return () => {
@@ -29,7 +24,7 @@ function HomePageClientInner({ initialAppointments }: AppointmentProps) {
   }, [selectedDate]);
 
   const filteredAppointments = useMemo(() => {
-    const all = appointmentsStore.list;
+    const all = appointmentsStore.items;
 
     if (!selectedDate) return all;
 
@@ -37,7 +32,7 @@ function HomePageClientInner({ initialAppointments }: AppointmentProps) {
       isSameDay(new Date(ap.appointmentAt), selectedDate),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appointmentsStore.list, selectedDate]);
+  }, [appointmentsStore.items, selectedDate]);
 
   const visibleAppointments = useMemo(
     () => filteredAppointments.slice(0, visibleCount),

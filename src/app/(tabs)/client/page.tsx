@@ -1,21 +1,9 @@
-import { cookies } from "next/headers";
+"use client";
+
 import { PromiseAppointment, ClientInfo } from "@/src/types/index";
-
-async function getAppointments(): Promise<PromiseAppointment[]> {
-  const token = (await cookies()).get("auth_token")?.value;
-  if (!token) return [];
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/appointments`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-      cache: "no-store",
-    },
-  );
-
-  if (!res.ok) return [];
-  return res.json();
-}
+import { useAppointments } from "@/src/features/appointments/hooks/useAppointments";
+import { appointmentsStore } from "@/src/features/appointments/stores/appointments.store";
+import { useMemo } from "react";
 
 function buildClients(appointments: PromiseAppointment[]): ClientInfo[] {
   const map = new Map<string, ClientInfo>();
@@ -34,15 +22,29 @@ function buildClients(appointments: PromiseAppointment[]): ClientInfo[] {
   return Array.from(map.values()).sort((a, b) => b.totalSpent - a.totalSpent);
 }
 
-export default async function ClientsPage() {
-  const appointments = await getAppointments();
-  const clients = buildClients(appointments);
+export default function ClientsPage() {
+  const { isLoading, isFetching } = useAppointments();
+  const appointments = appointmentsStore.items;
+  const clients = useMemo(() => buildClients(appointments), [appointments]);
+
+  const initialLoading = (isLoading || isFetching) && appointments.length === 0;
 
   return (
     <div className="max-w-md mx-auto space-y-4">
       <h1 className="text-xl font-bold">Клиенты</h1>
 
-      {clients.length === 0 && (
+      {initialLoading && (
+        <div className="space-y-2">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-12 rounded-xl border border-border bg-card animate-pulse"
+            />
+          ))}
+        </div>
+      )}
+
+      {!initialLoading && clients.length === 0 && (
         <p className="text-sm text-muted-foreground">
           Клиентов пока нет — добавь первую запись ✨
         </p>

@@ -1,23 +1,11 @@
-import { cookies } from "next/headers";
-import { AppointmentPrice } from "@/src/types/index";
+"use client";
 
-async function getAppointments(): Promise<AppointmentPrice[]> {
-  const token = (await cookies()).get("auth_token")?.value;
-  if (!token) return [];
+import { useMemo } from "react";
+import { useAppointments } from "@/src/features/appointments/hooks/useAppointments";
+import { appointmentsStore } from "@/src/features/appointments/stores/appointments.store";
+import type { Appointment } from "@/src/features/appointments/types";
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/appointments`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-      cache: "no-store",
-    },
-  );
-
-  if (!res.ok) return [];
-  return res.json();
-}
-
-function computeStats(appointments: AppointmentPrice[]) {
+function computeStats(appointments: Appointment[]) {
   const total = appointments.length;
   const totalRevenue = appointments.reduce((sum, ap) => sum + ap.priceCents, 0);
 
@@ -38,9 +26,30 @@ function computeStats(appointments: AppointmentPrice[]) {
   };
 }
 
-export default async function StatsPage() {
-  const appointments = await getAppointments();
-  const stats = computeStats(appointments);
+const StatsPage = () => {
+  const { isLoading, isFetching } = useAppointments();
+
+  const appointments = appointmentsStore.items;
+
+  const initialLoading = (isLoading || isFetching) && appointments.length === 0;
+
+  const stats = useMemo(() => computeStats(appointments), [appointments]);
+
+  if (initialLoading) {
+    return (
+      <div className="max-w-md mx-auto space-y-4">
+        <h1 className="text-xl font-bold">Статистика</h1>
+        <div className="grid grid-cols-2 gap-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-16 rounded-xl border border-border bg-card animate-pulse"
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-md mx-auto space-y-4">
@@ -74,8 +83,8 @@ export default async function StatsPage() {
           </div>
         </div>
       </div>
-
-      {/* Тут позже можно прикрутить графики (Recharts) */}
     </div>
   );
-}
+};
+
+export default StatsPage;

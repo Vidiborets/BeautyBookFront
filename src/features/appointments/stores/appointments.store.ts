@@ -20,8 +20,17 @@ class AppointmentsStore {
 
   hydrate(initial: Appointment[]) {
     if (this.hydrated) return;
-    this.items = initial ?? [];
+    runInAction(() => {
+      this.items = initial;
+    });
+
     this.hydrated = true;
+  }
+
+  clear() {
+    runInAction(() => {
+      this.items = [];
+    });
   }
 
   openCreate() {
