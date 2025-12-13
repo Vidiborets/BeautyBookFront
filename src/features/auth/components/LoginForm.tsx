@@ -28,14 +28,14 @@ export function LoginForm() {
         try {
           await authStore.login(values.email, values.password);
           router.push("/home");
-        } catch (e) {
+        } catch {
           setStatus("Неверный логин или пароль");
         } finally {
           setSubmitting(false);
         }
       }}
     >
-      {({ isSubmitting, status }) => (
+      {({ isSubmitting, status, values }) => (
         <Form className="space-y-4">
           <div>
             <label className="block text-sm mb-1">Email</label>
@@ -67,9 +67,28 @@ export function LoginForm() {
 
           {status && <div className="text-sm text-red-500">{status}</div>}
 
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} className="w-full">
             {isSubmitting ? "Входим..." : "Войти"}
           </Button>
+
+          <div className="text-center text-sm text-muted-foreground mt-3">
+            <span>Нет аккаунта? </span>
+            <button
+              type="button"
+              className="text-primary font-medium hover:underline"
+              onClick={() =>
+                router.push(
+                  `/signup${
+                    values.email
+                      ? `?email=${encodeURIComponent(values.email)}`
+                      : ""
+                  }`,
+                )
+              }
+            >
+              Создать аккаунт
+            </button>
+          </div>
         </Form>
       )}
     </Formik>

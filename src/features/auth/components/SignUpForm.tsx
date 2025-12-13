@@ -16,23 +16,34 @@ const SignUpSchema = Yup.object({
   phoneNumber: Yup.string().optional(),
 });
 
-export function SignUpForm() {
+type SignUpFormProps = {
+  initialEmail?: string;
+};
+
+export function SignUpForm({ initialEmail }: SignUpFormProps) {
   const router = useRouter();
 
   return (
     <Formik
       initialValues={{
-        email: "",
+        email: initialEmail ?? "",
         password: "",
         firstName: "",
         lastName: "",
         phoneNumber: "",
       }}
+      enableReinitialize
       validationSchema={SignUpSchema}
       onSubmit={async (values, { setSubmitting, setStatus }) => {
         setStatus(null);
         try {
+          // 1. Создаём пользователя
           await authStore.register(values);
+
+          // 2. Сразу логиним теми же данными
+          await authStore.login(values.email, values.password);
+
+          // 3. Отправляем на домашку
           router.push("/home");
         } catch (e) {
           setStatus("Ошибка регистрации");
@@ -41,7 +52,7 @@ export function SignUpForm() {
         }
       }}
     >
-      {({ isSubmitting, status }) => (
+      {({ isSubmitting, status, values }) => (
         <Form className="space-y-4">
           <div>
             <label className="block text-sm mb-1">Email</label>
@@ -98,9 +109,28 @@ export function SignUpForm() {
 
           {status && <div className="text-sm text-red-500">{status}</div>}
 
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} className="w-full">
             {isSubmitting ? "Создаём..." : "Зарегистрироваться"}
           </Button>
+
+          <div className="text-center text-sm text-muted-foreground mt-3">
+            <span>Уже есть аккаунт? </span>
+            <button
+              type="button"
+              className="text-primary font-medium hover:underline"
+              onClick={() =>
+                router.push(
+                  `/login${
+                    values.email
+                      ? `?email=${encodeURIComponent(values.email)}`
+                      : ""
+                  }`,
+                )
+              }
+            >
+              Войти
+            </button>
+          </div>
         </Form>
       )}
     </Formik>

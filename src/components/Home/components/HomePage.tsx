@@ -8,6 +8,8 @@ import { isSameDay } from "@/src/features/appointments/utils/index";
 import { appointmentsStore } from "@/src/features/appointments/stores/appointments.store";
 import { AppointmentContainer } from "@/src/features/appointments/containers/AppointmentsContainer";
 import { Button } from "@/src/components/Button";
+import TodayInfo from "./TodayInfo";
+import DashBoardIncone from "./DashBoardIncome";
 
 const PAGE_SIZE = 5;
 
@@ -42,7 +44,12 @@ function HomePageClientInner() {
   const hasMore = filteredAppointments.length > visibleAppointments.length;
 
   return (
-    <div className="max-w-md mx-auto space-y-4">
+    <div className="max-w-md mx-auto space-y-3">
+      <TodayInfo
+        date={selectedDate ?? new Date()}
+        count={filteredAppointments.length}
+        slotsCount={7}
+      />
       <div className="flex justify-center">
         <DatePicker
           selected={selectedDate}
@@ -81,6 +88,12 @@ function HomePageClientInner() {
 
       {/* universal sheet */}
       <AppointmentContainer />
+      <DashBoardIncone
+        date={selectedDate ?? new Date()}
+        count={filteredAppointments.length}
+        appoinmnets={filteredAppointments}
+        slotsCount={7}
+      />
     </div>
   );
 }

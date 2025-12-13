@@ -33,3 +33,13 @@ export type ModalProps = {
   title?: string;
   children: ReactNode;
 };
+
+export type TodayInfoProps = {
+  date: Date;
+  count: number;
+  slotsCount?: number;
+};
+
+export type DashBoardProps = TodayInfoProps & {
+  appoinmnets: Appointment[];
+};
