@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { AuthGuard } from "@/src/features/auth/components/AuthGuard";
-import Headers from "@/src/components/Headers";
+import Headers from "@/src/components/Headers/Headers";
 import IconHome from "@/src/assets/icons/home.svg";
 import IconPlus from "@/src/assets/icons/plus.svg";
 import IconUsers from "@/src/assets/icons/users.svg";
@@ -24,53 +23,61 @@ export default function TabsLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <AuthGuard>
-      <Headers />
-      <div className="min-h-screen pb-20 relative">
-        <main className="pr-4 pl-4">{children}</main>
+      {/* Центруем всё приложение и ограничиваем ширину 480px */}
+      <div className="min-h-screen flex justify-center">
+        <div className="relative w-full max-w-md pb-20">
+          <Headers />
 
-        <nav className="fixed bottom-0 left-0 right-0 z-40">
-          <div className="max-w-md mx-auto px-4 pb-safe">
-            <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-(--shadow-xl) border border-(--color-border-light) mb-2 flex items-center justify-around px-1.5 py-1.5">
-              {tabs.map((tab) => {
-                const active = pathname.startsWith(tab.href);
-                return (
-                  <Link
-                    key={tab.href}
-                    href={tab.href}
-                    className={claassNames(
-                      "flex flex-col items-center gap-1 px-5 py-2.5 rounded-2xl transition-all duration-200 min-w-[70px] bg-(--color-brand) shadow-(--shadow-sm) text-muted-foreground ",
-                      {
-                        "bg-primary text-primary-foreground": active,
-                      },
-                    )}
-                  >
-                    <div
+          <main className="px-4">{children}</main>
+
+          {/* Таб-бар чуть выше низа, без <Link>, только кнопки */}
+          <nav className="fixed bottom-3 left-1/2 -translate-x-1/2 z-40 w-full max-w-md">
+            <div className="px-4 pb-safe">
+              <div className="bg-white/90 cursor-pointer backdrop-blur-xl rounded-3xl shadow-(--shadow-xl) border border-(--color-border-light) mb-2 flex items-center justify-around px-1.5 py-1.5">
+                {tabs.map((tab) => {
+                  const active = pathname.startsWith(tab.href);
+                  return (
+                    <button
+                      key={tab.href}
+                      type="button"
+                      onClick={() => router.push(tab.href)}
                       className={claassNames(
-                        "rounded-full flex items-center justify-center text-lg",
-                        { "text-muted-foreground": !active },
-                      )}
-                    >
-                      {tab.icon}
-                    </div>
-                    <span
-                      className={classNames(
-                        "text-xs font-bold mt-1 text-muted-foreground",
+                        "flex flex-col items-center gap-1 px-5 py-2.5 rounded-2xl transition-all duration-200 min-w-[70px] shadow-(--shadow-sm)",
                         {
-                          "text-white": active,
+                          "bg-primary text-primary-foreground": active,
+                          "bg-transparent text-muted-foreground": !active,
                         },
                       )}
                     >
-                      {tab.label}
-                    </span>
-                  </Link>
-                );
-              })}
+                      <div
+                        className={claassNames(
+                          "rounded-full flex items-center justify-center text-lg",
+                          { "text-muted-foreground": !active },
+                        )}
+                      >
+                        {tab.icon}
+                      </div>
+                      <span
+                        className={classNames(
+                          "text-xs font-bold mt-1 text-muted-foreground",
+                          {
+                            "text-white": active,
+                          },
+                        )}
+                      >
+                        {tab.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </nav>
+          </nav>
+        </div>
       </div>
     </AuthGuard>
   );

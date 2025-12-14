@@ -4,7 +4,8 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { setOnUnauthorized, api } from "@/src/lib/axios";
 import { signInRequest } from "../api/sign-in";
 import { signUpRequest } from "../api/sign-up";
-import { AuthUser } from "../types";
+import { AuthUser, UpdateUserPayload } from "../types";
+import { updateUserRequest } from "../api/update-user";
 
 class AuthStore {
   user: AuthUser | null = null;
@@ -104,6 +105,23 @@ class AuthStore {
         this.hydrated = true;
       });
       window.location.href = "/login";
+    }
+  }
+
+  async updateProfile(payload: UpdateUserPayload) {
+    if (!this.user) return;
+
+    this.loading = true;
+    try {
+      const updated = await updateUserRequest(this.user.id, payload);
+
+      runInAction(() => {
+        this.user = updated;
+      });
+    } finally {
+      runInAction(() => {
+        this.loading = false;
+      });
     }
   }
 

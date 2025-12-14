@@ -60,7 +60,7 @@ const SideBar = ({ setMenuOpen, menuOpen }: SideBarMenuProps) => {
             </Link>
 
             <Link
-              href="/settings"
+              href="/profile"
               onClick={() => setMenuOpen(false)}
               className="text-sm rounded-lg px-3 py-2 hover:bg-muted transition-colors"
             >

@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { UserLogo } from "./UserLogo";
-import IconBell from "../assets/icons/bell.svg";
-import IconBurgerMenu from "../assets/icons/menu.svg";
-import SideBar from "./SideBar";
+import { UserLogo } from "../Headers/UserLogo";
+import IconBell from "../../assets/icons/bell.svg";
+import IconBurgerMenu from "../../assets/icons/menu.svg";
+import SideBar from "../SideBar";
 
 const Headers = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -31,7 +31,6 @@ const Headers = () => {
         </div>
       </div>
 
-      {/* Меню всегда в дереве, анимация работает и на открытие, и на закрытие */}
       <SideBar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
     </>
   );
