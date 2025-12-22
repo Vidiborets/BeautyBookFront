@@ -66,6 +66,21 @@ const SideBar = ({ setMenuOpen, menuOpen }: SideBarMenuProps) => {
             >
               Настройки
             </Link>
+            <Link
+              href="/saloons"
+              onClick={() => setMenuOpen(false)}
+              className="text-sm rounded-lg px-3 py-2 hover:bg-muted transition-colors"
+            >
+              Салоны и сотрудники
+            </Link>
+
+            <Link
+              href="/services"
+              onClick={() => setMenuOpen(false)}
+              className="text-sm rounded-lg px-3 py-2 hover:bg-muted transition-colors"
+            >
+              Услуги
+            </Link>
 
             <div className="mt-4 pt-4 border-t border-border">
               <LogoutButton />

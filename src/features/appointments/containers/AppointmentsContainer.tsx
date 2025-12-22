@@ -3,7 +3,10 @@
 import { observer } from "mobx-react-lite";
 import { Modal } from "@/src/components/Modal";
 import { appointmentsStore } from "../stores/appointments.store";
-import { AppointmentForm } from "../components/AppointmentForm";
+import {
+  AppointmentForm,
+  AppointmentFormValues,
+} from "../components/AppointmentForm";
 import { Appointment } from "../types";
 
 function toFormInitial(ap: Appointment) {
@@ -26,6 +29,32 @@ export const AppointmentContainer = observer(() => {
   const store = appointmentsStore;
   const isEdit = store.sheetMode === "edit" && store.editing;
 
+  const onSubmit = async (values: AppointmentFormValues) => {
+    const appointmentAt = new Date(
+      `${values.date}T${values.time}:00`,
+    ).toISOString();
+
+    if (isEdit && store.editing) {
+      await store.update(store.editing.id, {
+        serviceName: values.serviceName,
+        clientName: values.clientName,
+        priceCents: Number(values.price) * 100,
+        appointmentAt,
+        durationMin: values.durationMin,
+        description: values.description || undefined,
+      });
+    } else {
+      await store.create({
+        serviceName: values.serviceName,
+        clientName: values.clientName,
+        priceCents: Number(values.price) * 100,
+        appointmentAt,
+        durationMin: values.durationMin,
+        description: values.description || undefined,
+      });
+    }
+  };
+
   return (
     <Modal
       open={store.sheetOpen}
@@ -37,31 +66,7 @@ export const AppointmentContainer = observer(() => {
           isEdit && store.editing ? toFormInitial(store.editing) : undefined
         }
         submitLabel={isEdit ? "Обновить" : "Создать"}
-        onSubmit={async (values) => {
-          const appointmentAt = new Date(
-            `${values.date}T${values.time}:00`,
-          ).toISOString();
-
-          if (isEdit && store.editing) {
-            await store.update(store.editing.id, {
-              serviceName: values.serviceName,
-              clientName: values.clientName,
-              priceCents: Number(values.price) * 100,
-              appointmentAt,
-              durationMin: values.durationMin,
-              description: values.description || undefined,
-            });
-          } else {
-            await store.create({
-              serviceName: values.serviceName,
-              clientName: values.clientName,
-              priceCents: Number(values.price) * 100,
-              appointmentAt,
-              durationMin: values.durationMin,
-              description: values.description || undefined,
-            });
-          }
-        }}
+        onSubmit={onSubmit}
       />
     </Modal>
   );

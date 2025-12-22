@@ -3,6 +3,16 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Button } from "@/src/components/Button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useServices } from "../../services/hooks/useServices";
+import { servicesStore } from "../../services/store/service.stores";
+import { cn } from "@/lib/utils";
 
 export type AppointmentFormValues = {
   serviceName: string;
@@ -45,6 +55,9 @@ export function AppointmentForm({
   submitLabel?: string;
 }) {
   const merged = { ...defaultValues, ...initialValues };
+  const { isLoading: servicesLoading } = useServices();
+  const services = servicesStore.items;
+  console.log("services", services);
 
   return (
     <Formik
@@ -65,14 +78,40 @@ export function AppointmentForm({
         }
       }}
     >
-      {({ isSubmitting, status }) => (
+      {({ isSubmitting, status, setFieldValue, values }) => (
         <Form className="space-y-4">
           <div>
             <label className="block text-sm mb-1">Услуга</label>
-            <Field
-              name="serviceName"
-              className="w-full rounded-lg border border-input px-3 py-2 text-sm"
-            />
+
+            <Select
+              value={values.serviceName}
+              onValueChange={(val) => {
+                setFieldValue("serviceName", val);
+
+                const selected = services.find((s) => String(s.id) === val);
+                if (selected) {
+                  setFieldValue("price", String(selected.price));
+                  setFieldValue("durationMin", selected.duration);
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue
+                  placeholder={
+                    servicesLoading ? "Загрузка..." : "Выберите услугу"
+                  }
+                />
+              </SelectTrigger>
+
+              <SelectContent className={cn("z-[9999]")}>
+                {services.map((s) => (
+                  <SelectItem key={s.id} value={String(s.id)}>
+                    {s.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
             <ErrorMessage
               name="serviceName"
               component="div"

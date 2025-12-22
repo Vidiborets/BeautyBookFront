@@ -27,14 +27,12 @@ export default function TabsLayout({
 
   return (
     <AuthGuard>
-      {/* Центруем всё приложение и ограничиваем ширину 480px */}
       <div className="min-h-screen flex justify-center">
         <div className="relative w-full max-w-md pb-20">
           <Headers />
 
           <main className="px-4">{children}</main>
 
-          {/* Таб-бар чуть выше низа, без <Link>, только кнопки */}
           <nav className="fixed bottom-3 left-1/2 -translate-x-1/2 z-40 w-full max-w-md">
             <div className="px-4 pb-safe">
               <div className="bg-white/90 cursor-pointer backdrop-blur-xl rounded-3xl shadow-(--shadow-xl) border border-(--color-border-light) mb-2 flex items-center justify-around px-1.5 py-1.5">
@@ -46,7 +44,7 @@ export default function TabsLayout({
                       type="button"
                       onClick={() => router.push(tab.href)}
                       className={claassNames(
-                        "flex flex-col items-center gap-1 px-5 py-2.5 rounded-2xl transition-all duration-200 min-w-[70px] shadow-(--shadow-sm)",
+                        "flex flex-col items-center cursor-pointer gap-1 px-5 py-2.5 rounded-2xl transition-all duration-200 min-w-[70px] shadow-(--shadow-sm)",
                         {
                           "bg-primary text-primary-foreground": active,
                           "bg-transparent text-muted-foreground": !active,
@@ -55,7 +53,7 @@ export default function TabsLayout({
                     >
                       <div
                         className={claassNames(
-                          "rounded-full flex items-center justify-center text-lg",
+                          "rounded-full flex items-center justify-center text-lg w-6 h-6",
                           { "text-muted-foreground": !active },
                         )}
                       >

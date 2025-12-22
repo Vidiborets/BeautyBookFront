@@ -11,6 +11,8 @@ import { Button } from "@/src/components/Button";
 import TodayInfo from "./TodayInfo";
 import DashBoardIncone from "./DashBoardIncome";
 
+// import { ButtonGlass, InputGlass, ThemeProvider } from "shadcn-glass-ui";
+
 const PAGE_SIZE = 5;
 
 function HomePageClientInner() {
@@ -59,10 +61,21 @@ function HomePageClientInner() {
       </div>
 
       {/* CTA */}
-      <div className="flex justify-center">
-        <Button onClick={() => appointmentsStore.openCreate()}>
+      <div className="flex justify-center flex-col">
+        {/* <ButtonGlass
+          variant="secondary"
+          onClick={() => appointmentsStore.openCreate()}
+        >
           Добавить запись
-        </Button>
+        </ButtonGlass>
+        <ButtonGlass variant="default">Default</ButtonGlass>
+        <ButtonGlass variant="secondary">Secondary</ButtonGlass>
+
+        <ButtonGlass variant="destructive">Destructive</ButtonGlass>
+        <ButtonGlass variant="outline">Outline</ButtonGlass>
+        <ButtonGlass variant="ghost">Ghost</ButtonGlass>
+        <ButtonGlass variant="default">Default (Glass)</ButtonGlass>
+        <ButtonGlass variant="success">Success (Glass)</ButtonGlass> */}
       </div>
 
       {filteredAppointments.length === 0 ? (

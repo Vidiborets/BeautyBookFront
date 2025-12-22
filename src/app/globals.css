@@ -1,29 +1,17 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-:root {
-  --background: #fafbfc;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Tailwind v4 inline theme */
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  /* Р±Р°Р·РѕРІС‹Рµ С†РІРµС‚Р° */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-white: #ffffff;
   --color-black: #000000;
   --color-bg: #fafbfc;
 
-  /* Р±СЂРµРЅРґРѕРІР°СЏ РїР°Р»РёС‚СЂР° (primary / brand) */
   --color-brand-50: #eeedfd;
   --color-brand-100: #cac6f9;
   --color-brand-200: #b1aaf6;
@@ -35,10 +23,8 @@ body {
   --color-brand-800: #2f2781;
   --color-brand-900: #241e63;
 
-  /* Р±СЂРµРЅРґРѕРІР°СЏ РїР°Р»РёС‚СЂР° (pink ) */
   --color-pink-200: #fccee8;
 
-  /* РЅРµР№С‚СЂР°Р»СЊРЅС‹Рµ (grey) */
   --color-grey-50: #f9fafb;
   --color-grey-100: #f3f4f6;
   --color-grey-200: #e5e7eb;
@@ -151,8 +137,6 @@ body {
   --tw-gradient-stops: var(--tw-gradient-via-stops);
 
   --radius: 0.625rem;
-  --background: #fafbfc;
-  --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -182,6 +166,9 @@ body {
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
 }
 
 .bg-gradient-to-br {
@@ -191,7 +178,17 @@ body {
 
 @layer base {
   * {
+    border-color: var(--color-border);
     box-sizing: border-box;
+  }
+
+  body[data-scroll-locked] {
+    overflow: hidden !important;
+    overscroll-behavior: contain;
+  }
+
+  html {
+    scrollbar-gutter: stable;
   }
 
   html,
@@ -211,8 +208,6 @@ body {
       "Segoe UI",
       sans-serif;
     -webkit-font-smoothing: antialiased;
-    margin: 0 auto;
-    max-width: var(--container-md);
   }
 
   a {
@@ -249,13 +244,6 @@ body {
   p {
     margin: 0;
   }
-
-  svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  /* ====== РўРёРїРѕРіСЂР°С„РёРєР° РїРѕ С‚РѕРєРµРЅР°Рј Р· Figma ====== */
 
   h1 {
     font-size: 48px;
@@ -298,8 +286,6 @@ body {
     font-weight: 600;
     letter-spacing: 0;
   }
-
-  /* РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ С‚РµРєСЃС‚РѕРІС‹Рµ СЃС‚РёР»Рё РєР°Рє РєР»Р°СЃСЃС‹ */
 
   .text-button {
     font-size: 13px;
@@ -352,7 +338,54 @@ body {
   }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-card {
+  animation: fadeInUp 0.25s ease-out;
+}
+
 :root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
 .dark {
@@ -387,28 +420,4 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.auth-card {
-  animation: fadeInUp 0.25s ease-out;
 }

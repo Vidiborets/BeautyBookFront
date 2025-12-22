@@ -60,7 +60,6 @@ const UserProfileForm = observer(() => {
               className="text-xs text-red-500 mt-1"
             />
           </div>
-
           <div>
             <label className="block text-sm mb-1">Фамилия</label>
             <Field
@@ -73,7 +72,6 @@ const UserProfileForm = observer(() => {
               className="text-xs text-red-500 mt-1"
             />
           </div>
-
           <div>
             <label className="block text-sm mb-1">Телефон</label>
             <Field
@@ -86,7 +84,6 @@ const UserProfileForm = observer(() => {
               className="text-xs text-red-500 mt-1"
             />
           </div>
-
           {status && (
             <div className="text-xs text-muted-foreground">{status}</div>
           )}
