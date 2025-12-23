@@ -1,11 +1,11 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import { fetchServices } from "../api/api";
+import { fetchClients } from "../api/api";
 
-export function useServices() {
+export function useClients() {
   return useQuery({
-    queryKey: ["services"],
-    queryFn: fetchServices,
+    queryKey: ["clients"],
+    queryFn: fetchClients,
     staleTime: 60_000,
     refetchOnWindowFocus: false,
   });

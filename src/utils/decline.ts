@@ -4,7 +4,6 @@ function decline(
   genetive: string,
   plural: string,
 ): string {
-  console.log(number);
   const ii = number % 100;
   if (ii >= 11 && ii <= 19) {
     return plural;
