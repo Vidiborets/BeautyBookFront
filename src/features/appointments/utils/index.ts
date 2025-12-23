@@ -49,4 +49,19 @@ const selectedDateTitle = (date: Date) => {
   return format(date, "EEEE", { locale: ru });
 };
 
-export { formatTime, isSameDay, computeDayIncome, selectedDateTitle };
+const clamp = (n: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, n));
+
+const toHM = (totalMin: number) => {
+  const safe = Number.isFinite(totalMin) ? Math.max(0, totalMin) : 0;
+  return { h: Math.floor(safe / 60), m: safe % 60 };
+};
+
+export {
+  formatTime,
+  isSameDay,
+  computeDayIncome,
+  selectedDateTitle,
+  clamp,
+  toHM,
+};
